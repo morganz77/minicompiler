@@ -14,7 +14,32 @@
  * @version 9/12/2015
  */
 public class P1{
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args){
+        try{
+            testSym();
+            testSymTable();
+        }catch (Exception e){
+            System.out.println("no exception should be caught here!");
+        }
+    }
+
+    /**
+     * To test methods in Sym class
+     */
+    public static void testSym(){
+        Sym s = new Sym("int");
+        if ( !s.getType().equals("int") ){
+            System.out.println("getType() in Sym didn't return \"int\"");
+        }
+        if ( !s.toString().equals("int") ){
+            System.out.println("toString() in Sym didn't return \"int\"");
+        }
+    }
+
+    /**
+     * To test methods and their exceptions in SymTable class
+     */
+    public static void testSymTable() throws Exception{
         SymTable st = new SymTable();
         st.addScope();
 
@@ -53,6 +78,20 @@ public class P1{
         }catch (DuplicateSymException dse){
         }
 
+        //add null to the list
+        try{
+            st.addDecl(v1, null);
+            System.out.println("no exception thrown on attampt to "
+                    + "add null as symbol type to the list");
+        }catch (NullPointerException npe){
+        }
+        try{
+            st.addDecl(null, symi);
+            System.out.println("no exception thrown on attampt to "
+                    + "add null as symbol name to the list");
+        }catch (NullPointerException npe){
+        }
+
         //lookup at global scope vs local scope
         String v4 = "v4";
         Sym symf = new Sym("float");
@@ -63,7 +102,7 @@ public class P1{
             System.out.println("either lookupLocal or lookupGlobal is not "
                     + "working");
         }
-        
+
         //remove local scope
         st.removeScope();
         if ( st.lookupGlobal(v4) != null ){
