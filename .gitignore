@@ -17,3 +17,6 @@ hs_err_pid
 # handins
 Zhang.*.pdf
 Zhang.*.zip
+*.odt
+*.docx
+*.doc
