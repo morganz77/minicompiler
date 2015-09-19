@@ -22,6 +22,7 @@ public class SymTable{
      */
     public SymTable(){
         symList = new LinkedList<HashMap<String, Sym>>();
+        symList.add(new HashMap<String, Sym>());
     }
 
     /**
@@ -111,7 +112,7 @@ public class SymTable{
      * For debugging purpose
      */
     public void print(){
-        System.out.println("\nSym Table\n");
+        System.out.println("\nSym Table");
         for ( Map<String, Sym> m : this.symList ){
             System.out.println(m.toString());
         }

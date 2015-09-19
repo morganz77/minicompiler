@@ -1,0 +1,18 @@
+1234567
+11234567123456712345671234567234567
+
+""
+"&!88"
+"use \n to denote a newline character"
+"include a quote like this \" and a backslash like this \\"
+
+123"backslash followed by space: \ is not allowed" "\b"
+
+"unterminated
+"also unterminated \"
+"backslash followed by space: \ is not allowed"
+"bad escaped character: \a AND not terminated
+
+"very bad string \ 
+abc
+

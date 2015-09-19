@@ -13,3 +13,7 @@ hs_err_pid
 
 # tmpfiles
 *.swp
+
+# handins
+Zhang.*.pdf
+Zhang.*.zip
