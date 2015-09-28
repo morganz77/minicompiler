@@ -15,6 +15,10 @@ ids = [LETTERS_]
 STRING = \"(\\[nt\'\"\\\?]|[^\\\n\"])*\"
 CHARSYM = \{|\}|\(|\)|;|,|\.|<<|>>|\+\+|--|\+|-|\*|/|!|&&|\|\||==|!=|<|>|<=|>=|=
 COMMENT = (\/\/|#).*
+SLASH = [/]
+STAR = [*]
+T = {SLASH}{STAR}([^*]|[^/])+{STAR}{SLASH}
+
 
 %type IntList
 %function next_token
@@ -23,10 +27,5 @@ COMMENT = (\/\/|#).*
 
 %%
 
-{CHARSYM} {System.out.println("CHARSYM\t" + yytext()+"\t"+String.valueOf(yyline));}
-{STRING} {System.out.println("STRING");}
-{ids}+ {System.out.println("ids");}
-{reserverd} {System.out.println("reserverd");}
-{WHITESPACE}+ {System.out.println("found white space!!");}
-{LETTERS}+ {System.out.println("found a letter\t" + yytext());}
-{COMMENT} {System.out.println("found a comment\t" + yytext());}
+{T} {System.out.println("T");}
+. {System.out.println("no");}

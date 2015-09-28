@@ -12,10 +12,19 @@ public class P2 {
     public static void main(String[] args) throws IOException {
                                            // exception may be thrown by yylex
         // test all tokens
-        testAllTokens();
+        testAllTokens("input/allTokens.in","output/allTokens.out");
         CharNum.num = 1;
     
         // ADD CALLS TO OTHER TEST METHODS HERE
+        //test string literals
+        testAllTokens("input/strings.in","output/strings.out");
+        CharNum.num = 1;
+        //test integer literals
+        testAllTokens("input/integers.in","output/integers.out");
+        CharNum.num = 1;
+        ////test other
+        //testAllTokens("input/allTokens.in","output/allTokens.out");
+        //CharNum.num = 1;
     }
 
     /**
@@ -27,18 +36,18 @@ public class P2 {
      * correctness of the scanner by comparing the input and output files
      * (e.g., using a 'diff' command).
      */
-    private static void testAllTokens() throws IOException {
+    private static void testAllTokens(String inFileName, String outFileName) throws IOException {
         // open input and output files
         FileReader inFile = null;
         PrintWriter outFile = null;
         try {
-            inFile = new FileReader("allTokens.in");
-            outFile = new PrintWriter(new FileWriter("allTokens.out"));
+            inFile = new FileReader(inFileName);
+            outFile = new PrintWriter(new FileWriter(outFileName));
         } catch (FileNotFoundException ex) {
-            System.err.println("File allTokens.in not found.");
+            System.err.println("File " + inFileName +" not found.");
             System.exit(-1);
         } catch (IOException ex) {
-            System.err.println("allTokens.out cannot be opened.");
+            System.err.println(outFileName + " cannot be opened.");
             System.exit(-1);
         }
 
@@ -164,11 +173,11 @@ public class P2 {
             case sym.GREATEREQ:
                 outFile.println(">=");
                 break;
-			case sym.ASSIGN:
+            case sym.ASSIGN:
                 outFile.println("=");
                 break;
-			default:
-				outFile.println("UNKNOWN TOKEN");
+            default:
+                outFile.println("UNKNOWN TOKEN");
             } // end switch
 
             token = scanner.next_token();

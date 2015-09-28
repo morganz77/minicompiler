@@ -208,47 +208,19 @@ class Yylex {
 		/* 1 */ YY_NO_ANCHOR,
 		/* 2 */ YY_NO_ANCHOR,
 		/* 3 */ YY_NO_ANCHOR,
-		/* 4 */ YY_NO_ANCHOR,
+		/* 4 */ YY_NOT_ACCEPT,
 		/* 5 */ YY_NO_ANCHOR,
-		/* 6 */ YY_NO_ANCHOR,
-		/* 7 */ YY_NO_ANCHOR,
-		/* 8 */ YY_NO_ANCHOR,
-		/* 9 */ YY_NOT_ACCEPT,
-		/* 10 */ YY_NO_ANCHOR,
-		/* 11 */ YY_NO_ANCHOR,
-		/* 12 */ YY_NO_ANCHOR,
-		/* 13 */ YY_NOT_ACCEPT,
-		/* 14 */ YY_NO_ANCHOR,
-		/* 15 */ YY_NO_ANCHOR,
-		/* 16 */ YY_NOT_ACCEPT,
-		/* 17 */ YY_NO_ANCHOR,
-		/* 18 */ YY_NO_ANCHOR,
-		/* 19 */ YY_NOT_ACCEPT,
-		/* 20 */ YY_NO_ANCHOR,
-		/* 21 */ YY_NO_ANCHOR,
-		/* 22 */ YY_NO_ANCHOR,
-		/* 23 */ YY_NO_ANCHOR,
-		/* 24 */ YY_NO_ANCHOR,
-		/* 25 */ YY_NO_ANCHOR,
-		/* 26 */ YY_NO_ANCHOR,
-		/* 27 */ YY_NO_ANCHOR
+		/* 6 */ YY_NOT_ACCEPT,
+		/* 7 */ YY_NOT_ACCEPT
 	};
 	private int yy_cmap[] = unpackFromString(1,130,
-"29:9,24,25,29:2,14,29:18,24,7,11,28,29:2,8,13,1:3,4,1,5,1,6,29:11,1,2,10,3," +
-"13,29,26:4,27,26:6,27,26:5,27:3,26:6,29,12,29:2,15,29,26,16,26,23,26:4,19,2" +
-"6:2,18,26,20,17,26:4,21,26,22,26:4,1,9,1,29:2,0:2")[0];
+"4:10,3,4:2,3,4:28,2,4:4,1,4:80,0:2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,28,
-"0,1:2,2,3,4,5,1,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,6,24")[0];
+	private int yy_rmap[] = unpackFromString(1,8,
+"0,1,2,3,4,1,5,3")[0];
 
-	private int yy_nxt[][] = unpackFromString(25,30,
-"1,2,10,14,17,20,21,22,9,13,22,16,-1:3,3,4,26:2,23,26:2,27,26,5:2,26,11,6,-1" +
-":46,3,-1:11,3,-1:18,26,24,26:6,-1:2,26:2,-1:26,5:2,-1:5,6:13,-1,6:10,-1,6:4" +
-",-1:16,26:8,-1:2,26:2,-1:10,2,-1:23,2,-1:7,2,-1:34,3,26:8,-1:2,26,11,-1:18," +
-"26:5,8,26:2,-1:2,26:2,-1:11,2,-1:23,2,-1:6,2,-1:35,26:2,8,26:5,-1:2,26:2,-1" +
-":3,16:10,7,19,16:12,-1,16:4,-1:4,2,-1:41,26:7,8,-1:2,26:2,-1:13,16:3,-1:6,1" +
-"6:2,-1:13,2,-1:30,6,-1:33,2,-1:35,26:4,12,26:3,-1:2,26:2,-1:18,26,15,26:6,-" +
-"1:2,26:2,-1:18,26:3,18,26:4,-1:2,26:2,-1:18,26,25,26:6,-1:2,26:2,-1:2");
+	private int yy_nxt[][] = unpackFromString(6,5,
+"1,2,5,-1,5,-1:7,4,-1:3,7,6,7:2,-1,7:4,-1,3,6,7:2");
 
 	public IntList next_token ()
 		throws java.io.IOException {
@@ -299,92 +271,16 @@ class Yylex {
 					case -2:
 						break;
 					case 2:
-						{System.out.println("CHARSYM\t" + yytext()+"\t"+String.valueOf(yyline));}
+						{System.out.println("no");}
 					case -3:
 						break;
 					case 3:
-						{System.out.println("ids");}
+						{System.out.println("T");}
 					case -4:
 						break;
-					case 4:
-						{System.out.println("found a letter\t" + yytext());}
-					case -5:
-						break;
 					case 5:
-						{System.out.println("found white space!!");}
-					case -6:
-						break;
-					case 6:
-						{System.out.println("found a comment\t" + yytext());}
-					case -7:
-						break;
-					case 7:
-						{System.out.println("STRING");}
-					case -8:
-						break;
-					case 8:
-						{System.out.println("reserverd");}
-					case -9:
-						break;
-					case 10:
-						{System.out.println("CHARSYM\t" + yytext()+"\t"+String.valueOf(yyline));}
-					case -10:
-						break;
-					case 11:
-						{System.out.println("ids");}
-					case -11:
-						break;
-					case 12:
-						{System.out.println("found a letter\t" + yytext());}
-					case -12:
-						break;
-					case 14:
-						{System.out.println("CHARSYM\t" + yytext()+"\t"+String.valueOf(yyline));}
-					case -13:
-						break;
-					case 15:
-						{System.out.println("found a letter\t" + yytext());}
-					case -14:
-						break;
-					case 17:
-						{System.out.println("CHARSYM\t" + yytext()+"\t"+String.valueOf(yyline));}
-					case -15:
-						break;
-					case 18:
-						{System.out.println("found a letter\t" + yytext());}
-					case -16:
-						break;
-					case 20:
-						{System.out.println("CHARSYM\t" + yytext()+"\t"+String.valueOf(yyline));}
-					case -17:
-						break;
-					case 21:
-						{System.out.println("CHARSYM\t" + yytext()+"\t"+String.valueOf(yyline));}
-					case -18:
-						break;
-					case 22:
-						{System.out.println("CHARSYM\t" + yytext()+"\t"+String.valueOf(yyline));}
-					case -19:
-						break;
-					case 23:
-						{System.out.println("found a letter\t" + yytext());}
-					case -20:
-						break;
-					case 24:
-						{System.out.println("found a letter\t" + yytext());}
-					case -21:
-						break;
-					case 25:
-						{System.out.println("found a letter\t" + yytext());}
-					case -22:
-						break;
-					case 26:
-						{System.out.println("found a letter\t" + yytext());}
-					case -23:
-						break;
-					case 27:
-						{System.out.println("found a letter\t" + yytext());}
-					case -24:
+						{System.out.println("no");}
+					case -5:
 						break;
 					default:
 						yy_error(YY_E_INTERNAL,false);
