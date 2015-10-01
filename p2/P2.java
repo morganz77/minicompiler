@@ -22,8 +22,8 @@ public class P2 {
         //test integer literals
         testAllTokens("input/integers.in","output/integers.out");
         CharNum.num = 1;
-        ////test other
-        //testAllTokens("input/allTokens.in","output/allTokens.out");
+        //test other
+        testAllTokens("input/other.in","output/other.out");
         //CharNum.num = 1;
     }
 
