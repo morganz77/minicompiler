@@ -1,0 +1,7 @@
+the following is testing linenum and charnum
+the invalid char is surrounded by different types of tokens
+
+true false and @
+"this is a string"@"and another string"
+1234is a@ integer
+{}++--@<>

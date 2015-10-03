@@ -22,6 +22,15 @@ public class P2 {
         //test integer literals
         testAllTokens("input/integers.in","output/integers.out");
         CharNum.num = 1;
+        //test comments
+        testAllTokens("input/comments.in","output/comments.out");
+        CharNum.num = 1;
+        //test eof
+        testAllTokens("input/eof.in","output/eof.out");
+        CharNum.num = 1;
+        //test charnum
+        testAllTokens("input/charnum.in","output/charnum.out");
+        CharNum.num = 1;
         //test other
         testAllTokens("input/other.in","output/other.out");
         //CharNum.num = 1;
@@ -30,11 +39,18 @@ public class P2 {
     /**
      * testAllTokens
      *
-     * Open and read from file allTokens.txt
-     * For each token read, write the corresponding string to allTokens.out
+     * Open and read from file whose name is inFileName
+     * For each token read, write the corresponding string to file named
+     * outFileName
      * If the input file contains all tokens, one per line, we can verify
      * correctness of the scanner by comparing the input and output files
      * (e.g., using a 'diff' command).
+     *
+     * @param inFileName the name of the file to be read
+     * @param outFileName the name of the file to write to
+     * @throws IOException if input file is not found, or other file io
+     *                      occurs
+     *
      */
     private static void testAllTokens(String inFileName, String outFileName) throws IOException {
         // open input and output files

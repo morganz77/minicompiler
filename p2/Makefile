@@ -13,11 +13,12 @@
 # define the java compiler to be used and the flags
 JC = javac
 FLAGS = -g -cp $(CP)
-CP = /home/alpha/cs536_fall2015:/home/alpha/cs536_fall2015/java_cup_src/classes/:.
+#CP = /home/alpha/cs536_fall2015:/home/alpha/cs536_fall2015/java_cup_src/classes/:.
 IN = input/
 OUT = output/
 EXP = expect/
 #CP = /afs/cs.wisc.edu/u/m/o/morganz/Desktop/tmp:/afs/cs.wisc.edu/u/m/o/morganz/Desktop/tmp/java_cup_src/classes/:.
+CP = ~cs536-1/public/tools/deps:.
 
 P2.class: P2.java Yylex.class sym.class
 	$(JC) $(FLAGS) P2.java
@@ -46,6 +47,8 @@ test:
 	diff $(OUT)strings.out $(EXP)strings.exp
 	###for integers
 	diff $(OUT)integers.out $(EXP)integers.exp
+	###for comments
+	diff $(OUT)comments.out $(EXP)comments.exp
 	###for all errors
 	diff $(OUT)allErrors.out $(EXP)allErrors.exp
 
@@ -59,4 +62,4 @@ clean:
 	rm -f $(OUT)*
 
 cleantest:
-	rm -f allTokens.out
+	rm -f $(OUT)*
