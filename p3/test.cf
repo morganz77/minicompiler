@@ -1,0 +1,7 @@
+int x;
+int y;
+bool z;
+void a;
+struct S{ int a;int b;bool c;};
+int foo() {int a;int b;}
+int bar(bool z, int k) {bool c; int ccc; }
