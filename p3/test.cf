@@ -1,7 +1,36 @@
+//variable declaration
 int x;
 int y;
 bool z;
 void a;
+
+//struct
 struct S{ int a;int b;bool c;};
+
+//function
+//a. with no statement
 int foo() {int a;int b;}
 int bar(bool z, int k) {bool c; int ccc; }
+//b. with statement
+int bar(bool z, int k) {bool c; int ccc; c=true; ccc=1;c=2; cout<<ccc;cin>>a; }
+int bar2(bool z) {
+int a;
+struct A b;
+if (true){
+struct A b;
+cout<<a;
+}else{
+cout<<b;
+}
+if (false){
+cout<<c;
+}
+i++;
+i--;
+}
+//c.call function
+int main(){
+if(1){
+foo(true, a, 1, false);
+}
+}
