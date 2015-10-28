@@ -6,6 +6,7 @@ bool z;
 void a;
 //b.struct decl
 struct S{ int a;int b;bool c;};
+struct SS{ int a;int b;bool c;struct S sa;};
 //c.function decl
 //c1. with no statement
 int foo() {int a;int b;}

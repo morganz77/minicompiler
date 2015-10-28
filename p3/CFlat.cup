@@ -103,7 +103,7 @@ precedence left AND;
 precedence nonassoc LESS, LESSEQ, GREATER, GREATEREQ, EQUALS, NOTEQUALS;
 precedence left PLUS, MINUS;
 precedence left TIMES, DIVIDE;
-precedence left  NOT; //? unary minus
+precedence left  NOT; 
 precedence left DOT;
 
 
@@ -153,7 +153,7 @@ varDecl         ::= type:t id:i SEMICOLON
                 {: RESULT = new VarDeclNode(t, i, VarDeclNode.NOT_STRUCT);
                 :}
                 | STRUCT:s id:i1 id:i2 SEMICOLON
-                {: RESULT = new VarDeclNode(new StructNode(i1), i2, 4); //size?
+                {: RESULT = new VarDeclNode(new StructNode(i1), i2, 0); //size?
                 :}
 
                 ;
@@ -242,7 +242,7 @@ stmt            ::= assignExp:ae SEMICOLON
                 | RETURN exp:e SEMICOLON
                 {: RESULT = new ReturnStmtNode(e);
                 :}
-                | RETURN SEMICOLON //?
+                | RETURN SEMICOLON 
                 {: RESULT = new ReturnStmtNode(null);
                 :}
                 | fncall:f SEMICOLON
@@ -321,7 +321,7 @@ term            ::= loc:l
                 | FALSE:f
                 {: RESULT = new FalseNode(f.linenum, f.charnum);
                 :}
-                | LPAREN exp:e RPAREN //? 
+                | LPAREN exp:e RPAREN 
                 {: RESULT = e;
                 :}
                 | fncall:fc
