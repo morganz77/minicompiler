@@ -1,0 +1,3 @@
+DeclListNode:
+        public void analyze(SymTable symtb)
+
