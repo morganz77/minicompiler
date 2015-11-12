@@ -43,6 +43,7 @@ SemSym.class: SemSym.java
 ##test
 test:
 	java   P4 test.cf test.out
+	java   P4 nameErrors.cf nameErrors.out
 
 ###
 # clean

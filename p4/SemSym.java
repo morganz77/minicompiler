@@ -61,7 +61,7 @@ class StructDeclSym extends SemSym{
     }
 
     public int getKind(){
-        return IdNode.STRUCT;
+        return IdNode.STRUCTDECL;
     }
 
     public SymTable getSymtb(){
@@ -69,8 +69,34 @@ class StructDeclSym extends SemSym{
     }
 }
 
-//class StructSym extends SemSym{
-//    public int getKind(){
-//        return 2;
-//    }
-//}
+class StructSym extends SemSym{
+    private StructDeclSym sds;
+    private String name;// name of the struct
+
+    public StructSym(StructDeclSym sds, String name){
+        super("");
+        this.sds = sds;
+        this.name = name;
+    }
+
+    public int getKind(){
+        return IdNode.STRUCTVAR;
+    }
+
+    public SymTable getSymtb(){
+        return sds.getSymtb();
+    }
+
+    public SemSym lookup(String name) throws Exception{
+        SymTable symtb = getSymtb();
+        return symtb.lookupLocal(name);
+    }
+
+    public String toString() {
+        return "struct "+name;
+    }
+
+    public String getType() {
+        return name;
+    }
+}

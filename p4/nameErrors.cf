@@ -1,48 +1,41 @@
-//example from course webpage
-struct Point {
-    int x;
-    int y;
-};
-int f(int x, bool b) { }
-void g() {
-    int a;
-    bool b;
-    struct Point p;
-    p.x = a;
-    b = a == 3;
-    f(a + p.y*2, b);
-    g();
-}
-
 //declaration
 //a.variable declaration
 int x;
+//int x;
 int y;
 bool z;
+//void a;
 //b.struct decl
 struct S1{ int a;int b;bool c;};
 struct S2{
-    struct S1 s1;
+struct S1 s1;
 };
 struct S3{
-    int a;int b;bool c;
-    struct S2 s2;
+int a;int b;bool c;
+struct S2 s2;
 };
-//c.function decl
-int foo(int a, int b){
-    struct S3 s3;
-    s3.a = 1;
-    s3.c = 1;
-    s3.s2.s1.a = 0;
-    s3.s2.s1.a ++;
-    s3.s2.s1.a ++;
-    cout << s3.s2.s1.a ;
-    cin >> s3.s2.s1.a ;
+int foo(){
+struct S3 s3;
+s3.a = 1;
+s3.c = 1;
+s3.s2.s1.a = 0;
+s3.s2.s1.z = 0;
+s3.s2.s2.a = 0;
+s3.s1.s1.a = 0;
+s3.cc = 1;
+s3 = -s3.s2.sd.z;
+s3 = !s3.s2.sd.z;
+s3.s2.sa.a ++;
+s3.sa.s1.a --;
+cout << s3.sa.s1.a ;
+cin >> s3.sa.s1.a ;
     if (z>1) {
+        int z;
         int z;
         int s3;
     }
     if (z>1) {
+        int z;
         int z;
         int s3;
     } else {
@@ -55,19 +48,24 @@ int foo(int a, int b){
         z++;
     }
 }
-int a;
-int bar(bool z, int k, int a) {bool c; int ccc; c=true; ccc=1;c=2; cout<<ccc;cin>>a; }
+struct SS{ int a;int b;bool c;struct S sa;};
+//c.function decl
+//c1. with no statement
+int foo() {int a;int b;b.l.e.f.dd=d;}
+int bar(bool z, int k) {bool c; int ccc; }
+//c2. with statement
+int bar(bool z, int k) {bool c; int ccc; c=true; ccc=1;c=2; cout<<ccc;cin>>a; }
 int bar2(bool z) {
     int a;
-    struct S1 b;
+    struct A b;
     if (true){
-        struct S1 b;
+        struct A b;
         cout<<a;
     }else{
         cout<<b;
     }
     if (false){
-        cout<<a;
+        cout<<c;
     }
     while (a<0){
         while(a>-4){
@@ -76,14 +74,16 @@ int bar2(bool z) {
             }
         }
     }
-    a++;
-    a--;
+    i++;
+    i--;
 }
 
 //statement
 //a.assignExp
-int main(int a, bool b, int c){
-    struct S3 s;
+int main(int a, bool b, void b){
+    int a;
+    int b;
+    struct S s;
     a = 10; b = 5;
     a = b + a;
     a = b + b + a;
@@ -100,17 +100,17 @@ int main(int a, bool b, int c){
     a = -9*s.a+9*10;
     a = 1-9*s.a+9*10;
     a = a+b*c;
-
+    
 }
 //b.return
-int main1(int a, int b, int c){
+int main(int a, int b, int c){
     return 1;
 }
-void main2(){
+void main(){
     return ;
 }
 //c.function call
-int main3(){
+int main(){
     if(1){
         foo(true, a, 1, false);
     } else {
@@ -119,8 +119,6 @@ int main3(){
 }
 
 //exmample from assignment website
-int c;
-int main4(){
-    int b;
-    if (b == -1) { x = 4+3*5-y; while (c) { y = y*2+x; } } else { x = 0; }
+int main(){
+if (b == -1) { x = 4+3*5-y; while (c) { y = y*2+x; } } else { x = 0; }
 }

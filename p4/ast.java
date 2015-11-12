@@ -134,6 +134,7 @@ class ProgramNode extends ASTnode {
 
     public void analyze(){
         SymTable symtb = new SymTable();
+        globalStructSym = new HashMap<String,SemSym>();
         analyze(symtb);
     }
 
@@ -147,6 +148,8 @@ class ProgramNode extends ASTnode {
 
     // 1 kid
     private DeclListNode myDeclList;
+    //
+    public static HashMap<String,SemSym> globalStructSym;
 }
 
 class DeclListNode extends ASTnode {
@@ -161,7 +164,7 @@ class DeclListNode extends ASTnode {
                 ((DeclNode)it.next()).analyze(symtb);
             }
         } catch (NoSuchElementException ex) {
-            System.err.println("unexpected NoSuchElementException in DeclListNode.print");
+            System.err.println("unexpected NoSuchElementException in DeclListNode.analyze");
             System.exit(-1);
         }
     }
@@ -277,6 +280,18 @@ class ExpListNode extends ASTnode {
         myExps = S;
     }
 
+    public void analyze(SymTable symtb){
+        Iterator it = myExps.iterator();
+        try {
+            while (it.hasNext()) {
+                ((ExpNode)it.next()).analyze(symtb);
+            }
+        } catch (NoSuchElementException ex) {
+            System.err.println("unexpected NoSuchElementException in ExpListNode.analyze");
+            System.exit(-1);
+        }
+    }
+
     public void unparse(PrintWriter p, int indent) {
         Iterator<ExpNode> it = myExps.iterator();
         if (it.hasNext()) { // if there is at least one element
@@ -297,7 +312,7 @@ class ExpListNode extends ASTnode {
 // **********************************************************************
 
 abstract class DeclNode extends ASTnode {
-///TODO abstract
+    ///TODO abstract
     //public void analyze(SymTable symtb, String typeStr, SemSym sym ){ // type can be type of variable or return value of function
     //}
 }
@@ -308,12 +323,18 @@ class VarDeclNode extends DeclNode {
         myId = id;
         mySize = size;
     }
-    
+
     //public void analyze(SymTable symtb, String 
-   public void analyze(SymTable symtb){
-       String typeStr = myType.toString();
-       myId.analyzeDecl(symtb, typeStr, IdNode.VAR, null );
-   }
+    public void analyze(SymTable symtb){
+        String typeStr = myType.toString();
+        if (typeStr.equals("struct")){
+            String structName = ((StructNode)myType).getIdName();
+            myId.analyzeVarStructDecl(symtb, structName);
+        }else {
+            myId.analyzeDecl(symtb, typeStr, IdNode.VAR, null );
+        }
+        //symtb.print();
+    }
 
     public void unparse(PrintWriter p, int indent) {
         doIndent(p, indent);
@@ -333,32 +354,32 @@ class VarDeclNode extends DeclNode {
 
 class FnDeclNode extends DeclNode {
     public FnDeclNode(TypeNode type,
-                      IdNode id,
-                      FormalsListNode formalList,
-                      FnBodyNode body) {
+            IdNode id,
+            FormalsListNode formalList,
+            FnBodyNode body) {
         myType = type;
         myId = id;
         myFormalsList = formalList;
         myBody = body;
     }
 
-   public void analyze(SymTable symtb){
-       //check, then add new scope
-       //1. collecting formals, check fn name; 2. new scope start from formal; 3. remove scope
-       ArrayList<String> formals = myFormalsList.getFormals();
-       String retType = myType.toString();
-       myId.analyzeFnDecl(symtb, formals, retType);
+    public void analyze(SymTable symtb){
+        //check, then add new scope
+        //1. collecting formals, check fn name; 2. new scope start from formal; 3. remove scope
+        ArrayList<String> formals = myFormalsList.getFormals();
+        String retType = myType.toString();
+        myId.analyzeFnDecl(symtb, formals, retType);
 
-       symtb.addScope();//new scope, including formalList and body; id is upper scope
-       myFormalsList.analyze(symtb);
-       myBody.analyze(symtb);
+        symtb.addScope();//new scope, including formalList and body; id is upper scope
+        myFormalsList.analyze(symtb);
+        myBody.analyze(symtb);
 
-       try{
-           symtb.removeScope();
-       }catch (EmptySymTableException ete){
+        try{
+            symtb.removeScope();
+        }catch (EmptySymTableException ete){
             System.err.println("no scope to remove!");
-       }
-   }
+        }
+    }
 
     public void unparse(PrintWriter p, int indent) {
         doIndent(p, indent);
@@ -386,8 +407,8 @@ class FormalDeclNode extends DeclNode {
     }
 
     public void analyze(SymTable symtb){
-       String typeStr = myType.toString();
-       myId.analyzeDecl(symtb, typeStr, IdNode.VAR, null );
+        String typeStr = myType.toString();
+        myId.analyzeDecl(symtb, typeStr, IdNode.VAR, null );
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -411,17 +432,17 @@ class StructDeclNode extends DeclNode {
         myDeclList = declList;
     }
 
-   public void analyze(SymTable symtb){
-       SymTable symtbs = new SymTable();
-       myDeclList.analyze(symtbs);
-       myId.analyzeDecl(symtb, "", IdNode.STRUCT, symtbs);// empty string should be fine
-   }
+    public void analyze(SymTable symtb){
+        SymTable symtbs = new SymTable();
+        myDeclList.analyze(symtbs);
+        myId.analyzeDecl(symtb, "", IdNode.STRUCTDECL, symtbs);// empty string should be fine
+    }
 
     public void unparse(PrintWriter p, int indent) {
         doIndent(p, indent);
         p.print("struct ");
-		myId.unparse(p, 0);
-		p.println("{");
+        myId.unparse(p, 0);
+        p.println("{");
         myDeclList.unparse(p, indent+4);
         doIndent(p, indent);
         p.println("};\n");
@@ -430,7 +451,7 @@ class StructDeclNode extends DeclNode {
 
     // 2 kids
     private IdNode myId;
-	private DeclListNode myDeclList;
+    private DeclListNode myDeclList;
 }
 
 // **********************************************************************
@@ -481,18 +502,22 @@ class VoidNode extends TypeNode {
 
 class StructNode extends TypeNode {
     public StructNode(IdNode id) {
-		myId = id;
+        myId = id;
+    }
+
+    public String getIdName(){
+        return myId.toString();
     }
 
     public String toString(){
-        return myId.toString();
+        return "struct";
     }
     public void unparse(PrintWriter p, int indent) {
         p.print("struct ");
-		myId.unparse(p, 0);
+        myId.unparse(p, 0);
     }
-	
-	// 1 kid
+
+    // 1 kid
     private IdNode myId;
 }
 
@@ -527,6 +552,10 @@ class PostIncStmtNode extends StmtNode {
         myExp = exp;
     }
 
+    public void analyze(SymTable symtb){
+        myExp.analyze(symtb);
+    }
+
     public void unparse(PrintWriter p, int indent) {
         doIndent(p, indent);
         myExp.unparse(p, 0);
@@ -542,6 +571,10 @@ class PostDecStmtNode extends StmtNode {
         myExp = exp;
     }
 
+    public void analyze(SymTable symtb){
+        myExp.analyze(symtb);
+    }
+
     public void unparse(PrintWriter p, int indent) {
         doIndent(p, indent);
         myExp.unparse(p, 0);
@@ -555,6 +588,10 @@ class PostDecStmtNode extends StmtNode {
 class ReadStmtNode extends StmtNode {
     public ReadStmtNode(ExpNode e) {
         myExp = e;
+    }
+
+    public void analyze(SymTable symtb){
+        myExp.analyze(symtb);
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -573,6 +610,10 @@ class WriteStmtNode extends StmtNode {
         myExp = exp;
     }
 
+    public void analyze(SymTable symtb){
+        myExp.analyze(symtb);
+    }
+
     public void unparse(PrintWriter p, int indent) {
         doIndent(p, indent);
         p.print("cout << ");
@@ -589,6 +630,19 @@ class IfStmtNode extends StmtNode {
         myDeclList = dlist;
         myExp = exp;
         myStmtList = slist;
+    }
+
+    public void analyze(SymTable symtb){
+        myExp.analyze(symtb);
+
+        symtb.addScope();
+        myDeclList.analyze(symtb);
+        myStmtList.analyze(symtb);
+        try{
+            symtb.removeScope();
+        }catch (EmptySymTableException ete){
+            System.err.println("no scope to remove!");
+        }
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -610,13 +664,35 @@ class IfStmtNode extends StmtNode {
 
 class IfElseStmtNode extends StmtNode {
     public IfElseStmtNode(ExpNode exp, DeclListNode dlist1,
-                          StmtListNode slist1, DeclListNode dlist2,
-                          StmtListNode slist2) {
+            StmtListNode slist1, DeclListNode dlist2,
+            StmtListNode slist2) {
         myExp = exp;
         myThenDeclList = dlist1;
         myThenStmtList = slist1;
         myElseDeclList = dlist2;
         myElseStmtList = slist2;
+    }
+
+    public void analyze(SymTable symtb){
+        myExp.analyze(symtb);
+
+        symtb.addScope();
+        myThenDeclList.analyze(symtb);
+        myThenStmtList.analyze(symtb);
+        try{
+            symtb.removeScope();
+        }catch (EmptySymTableException ete){
+            System.err.println("no scope to remove!");
+        }
+
+        symtb.addScope();
+        myElseDeclList.analyze(symtb);
+        myElseStmtList.analyze(symtb);
+        try{
+            symtb.removeScope();
+        }catch (EmptySymTableException ete){
+            System.err.println("no scope to remove!");
+        }
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -650,7 +726,21 @@ class WhileStmtNode extends StmtNode {
         myDeclList = dlist;
         myStmtList = slist;
     }
-	
+
+    public void analyze(SymTable symtb){
+        myExp.analyze(symtb);
+
+        symtb.addScope();
+        myDeclList.analyze(symtb);
+        myStmtList.analyze(symtb);
+        try{
+            symtb.removeScope();
+        }catch (EmptySymTableException ete){
+            System.err.println("no scope to remove!");
+        }
+
+    }
+
     public void unparse(PrintWriter p, int indent) {
         doIndent(p, indent);
         p.print("while (");
@@ -673,6 +763,10 @@ class CallStmtNode extends StmtNode {
         myCall = call;
     }
 
+    public void analyze(SymTable symtb){
+        myCall.analyze(symtb);
+    }
+
     public void unparse(PrintWriter p, int indent) {
         doIndent(p, indent);
         myCall.unparse(p, indent);
@@ -686,6 +780,12 @@ class CallStmtNode extends StmtNode {
 class ReturnStmtNode extends StmtNode {
     public ReturnStmtNode(ExpNode exp) {
         myExp = exp;
+    }
+
+    public void analyze(SymTable symtb){
+        if (myExp != null){
+            myExp.analyze(symtb);
+        }
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -709,6 +809,7 @@ class ReturnStmtNode extends StmtNode {
 abstract class ExpNode extends ASTnode {
     public void analyze(SymTable symtb, int mode){}
     public SemSym getSym(){return null;}
+    public boolean getFirstStatus(){return true;}
 }
 
 class IntLitNode extends ExpNode {
@@ -778,6 +879,10 @@ class IdNode extends ExpNode {
         myStrVal = strVal;
     }
 
+    public void setSym(SemSym sym){
+        mySym = sym;
+    }
+
     public void analyze(SymTable symtb){//default is var analysis
         analyzeUse(symtb);
     }
@@ -785,17 +890,47 @@ class IdNode extends ExpNode {
     public void analyze(SymTable symtb, int mode){
         //TODO change mode to something useful
         try{
-            mySym = symtb.lookupGlobal(myStrVal); //link?
-            if ( mySym == null ){
-                ErrMsg.fatal(myLineNum, myCharNum, "Undeclared identifier");
-            } else if (mySym.getKind() != IdNode.STRUCT){
-                ErrMsg.fatal(myLineNum, myCharNum, "Dot-access of non-struct type");
-                mySym = null;
+            if (mode == IdNode.STRUCTVAR){
+                mySym = symtb.lookupGlobal(myStrVal); //link for unparsing
+                if ( mySym == null ){
+                    ErrMsg.fatal(myLineNum, myCharNum, "Undeclared identifier");
+                } else if (mySym.getKind() != IdNode.STRUCTVAR){
+                    ErrMsg.fatal(myLineNum, myCharNum, "Dot-access of non-struct type");
+                    mySym = null;
+                }
+            } else if (mode == IdNode.FUN){
+                mySym = symtb.lookupGlobal(myStrVal); //link for unparsing
+                if ( mySym == null ){
+                    ErrMsg.fatal(myLineNum, myCharNum, "Undeclared identifier");
+                } else if (mySym.getKind() != IdNode.FUN){
+                    ErrMsg.fatal(myLineNum, myCharNum,  "Undeclared identifier");//TODO piazza response
+                    mySym = null;
+                }
+
             }
         }catch(Exception e){
             ErrMsg.fatal(myLineNum, myCharNum, "Exception occurs!");
         }
+    }
 
+    public void analyzeVarStructDecl(SymTable symtb, String structName){
+        try{
+            //check if structName is in symtb; if it is structDecl
+            SemSym sym = symtb.lookupGlobal(structName);
+            if (sym==null){sym = ProgramNode.globalStructSym.get(structName);}//for func and var, this is a subset of symtb; for struct, it should work
+            //System.out.println(structName);
+            if (  sym == null || sym.getKind()!=IdNode.STRUCTDECL){
+                ErrMsg.fatal(myLineNum, myCharNum, "Invalid name of struct type");
+                return;
+            } 
+            if ( symtb.lookupLocal(myStrVal) != null ){
+                ErrMsg.fatal(myLineNum, myCharNum, "Multiply declared identifier");
+            }else {
+                symtb.addDecl(myStrVal, new StructSym((StructDeclSym)sym, structName));
+            }
+        }catch(Exception e){
+            ErrMsg.fatal(myLineNum, myCharNum, "Exception occurs!");
+        }
     }
 
     public void analyzeFnDecl(SymTable symtb, ArrayList<String> formals, String retType ){//fun seems to be complicated
@@ -810,7 +945,7 @@ class IdNode extends ExpNode {
         }
     }
 
-    public void analyzeDecl(SymTable symtb, String typeStr, int declType, SymTable symtbs){//1 variable VAR, 2 STRUCT
+    public void analyzeDecl(SymTable symtb, String typeStr, int declType, SymTable symtbs){//1 variable VAR, 2 STRUCTDECL
         try{
             if (declType == VAR){
                 //symtb.print();
@@ -822,13 +957,14 @@ class IdNode extends ExpNode {
                 } else {
                     symtb.addDecl(myStrVal, new SemSym(typeStr));
                 }
-            } else if (declType == STRUCT){
-        //symtbs.print();
-                    if ( symtb.lookupLocal(myStrVal) != null ){
-                        ErrMsg.fatal(myLineNum, myCharNum, "Multiply declared identifier");
-                    } else {
-                        symtb.addDecl(myStrVal, new StructDeclSym(symtbs));
-                    }
+            } else if (declType == STRUCTDECL){
+                if ( symtb.lookupLocal(myStrVal) != null ){
+                    ErrMsg.fatal(myLineNum, myCharNum, "Multiply declared identifier");
+                } else {
+                    //System.out.println("here " + myStrVal);
+                    symtb.addDecl(myStrVal, new StructDeclSym(symtbs));
+                    ProgramNode.globalStructSym.put(myStrVal, new StructDeclSym(symtbs));
+                }
             } else{ // FUN
                 //TODO
             }
@@ -846,7 +982,6 @@ class IdNode extends ExpNode {
         }catch(Exception e){
             ErrMsg.fatal(myLineNum, myCharNum, "Exception occurs!");
         }
-
     }
 
     public String toString(){
@@ -862,87 +997,113 @@ class IdNode extends ExpNode {
 
     public void unparse(PrintWriter p, int indent) {
         p.print(myStrVal);
+        if (mySym != null){
+            int kind = mySym.getKind();
+            if (kind == IdNode.VAR){
+                p.print("("+mySym.getType()+")");
+            }else if(kind == IdNode.STRUCTVAR){
+                p.print("("+mySym.getType()+")");
+            }else if(kind == IdNode.FUN){
+                FnSym fs = (FnSym)mySym;
+                p.print("("+fs.getFormals()+"->"+fs.getRet()+")");
+            }
+        }
     }
 
     private int myLineNum;
     private int myCharNum;
     private String myStrVal;
-///
+    ///
     private SemSym mySym;
     public static int VAR = 1;
-    public static int STRUCT = 2;
-    public static int FUN = 3;
+    public static int STRUCTDECL = 2;
+    public static int STRUCTVAR = 3;
+    public static int FUN = 4;
 }
 
 class DotAccessExpNode extends ExpNode {
     public DotAccessExpNode(ExpNode loc, IdNode id) {
         myLoc = loc;	
         myId = id;
-            System.out.println("here2 "+myId.toString());
+        //System.out.println("here2 "+myId.toString());
+        firstVarDefined = true;//assumen the very first var in chain of dot accesses is defined
     }
 
     public SemSym getSym(){
         return mySym;
     }
 
+    public boolean getFirstStatus(){
+        return firstVarDefined;
+    }
+
     public void analyze(SymTable symtb){
         try{
-            System.out.println("here "+myId.toString());
-        if (String.valueOf(myLoc.getClass()).equals("class IdNode")){//base case for recursion
-            myLoc.analyze(symtb, IdNode.STRUCT);
-            SemSym sym = myLoc.getSym();
-            if (sym != null){
-                //SymTable symtbs = ((StructDeclSym)sym).getSymtb();
-                //mySym = symtbs.lookup(myId.toString());
-                mySym = ((StructDeclSym)sym).lookup(myId.toString());
-                if(mySym==null){
-                    ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), "Invalid struct field name");
-                }
-            }
-        }else{
-            SemSym sym = myLoc.getSym();
-            if (sym == null){
-                ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), "Undeclared identifier");
-            }else {
-                int symKind = sym.getKind();
-                if (symKind != IdNode.STRUCT){
-                    ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), "Dot-access of non-struct type");
-                } else {
-                    //if id is in, update mySym to the one
-                    //else error
-                    //SymTable symtbs = ((StructDeclSym)sym).getSymtb();
-                    //mySym = symtbs.loolup(myId.toString());
-                    mySym = ((StructDeclSym)sym).lookup(myId.toString());
+            //System.out.println("here "+myId.toString());
+            if (String.valueOf(myLoc.getClass()).equals("class IdNode")){//base case for recursion
+                myLoc.analyze(symtb, IdNode.STRUCTVAR);
+                SemSym sym = myLoc.getSym();
+                if (sym != null){
+                    mySym = ((StructSym)sym).lookup(myId.toString());
+                    myId.setSym(mySym);
                     if(mySym==null){
                         ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), "Invalid struct field name");
+                        firstVarDefined = false;
+                    }
+                } else {
+                    firstVarDefined = false;
+                }
+            }else{
+                myLoc.analyze(symtb);
+                SemSym sym = myLoc.getSym();
+                if (!myLoc.getFirstStatus()){firstVarDefined=false;return;}
+                if (sym == null){
+                    ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), "Undeclared identifier");
+                    firstVarDefined = false;
+                }else {
+                    int symKind = sym.getKind();
+                    if (symKind != IdNode.STRUCTVAR){
+                        ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), "Dot-access of non-struct type");
+                        firstVarDefined = false;
+                    } else {
+                        //if id is in, update mySym to the one
+                        //else error
+                        //SymTable symtbs = ((StructDeclSym)sym).getSymtb();
+                        //mySym = symtbs.loolup(myId.toString());
+                        mySym = ((StructSym)sym).lookup(myId.toString());
+                        myId.setSym(mySym);
+                        if(mySym==null){
+                            //System.out.println("here");
+                            ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), "Invalid struct field name");
+                            firstVarDefined = false;
+                        }
                     }
                 }
             }
-        }
         }catch(Exception e){
             ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), "Exception occurs!");
         }
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(");
-		myLoc.unparse(p, 0);
-		p.print(").");
-		myId.unparse(p, 0);
+        myLoc.unparse(p, 0);
+        p.print(".");
+        myId.unparse(p, 0);
     }
 
     // 2 kids
     private ExpNode myLoc;	
     private IdNode myId;
-///
+    ///
     private SemSym mySym;
+    private boolean firstVarDefined;
 }
 
 class AssignNode extends ExpNode {
     public AssignNode(ExpNode lhs, ExpNode exp) {
         myLhs = lhs;
         myExp = exp;
-        System.out.println("here3 "+lhs.getClass().toString());
+        //System.out.println("here3 "+lhs.getClass().toString());
     }
 
     public void analyze(SymTable symtb){
@@ -951,11 +1112,11 @@ class AssignNode extends ExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-		if (indent != -1)  p.print("(");
-	    myLhs.unparse(p, 0);
-		p.print(" = ");
-		myExp.unparse(p, 0);
-		if (indent != -1)  p.print(")");
+        if (indent != -1)  p.print("(");
+        myLhs.unparse(p, 0);
+        p.print(" = ");
+        myExp.unparse(p, 0);
+        if (indent != -1)  p.print(")");
     }
 
     // 2 kids
@@ -974,14 +1135,21 @@ class CallExpNode extends ExpNode {
         myExpList = new ExpListNode(new LinkedList<ExpNode>());
     }
 
+    public void analyze(SymTable symtb){
+        //TODO: need to check num of params?
+        //wait for piazza
+        myId.analyze(symtb, IdNode.FUN);
+        myExpList.analyze(symtb);
+    }
+
     // ** unparse **
     public void unparse(PrintWriter p, int indent) {
-	    myId.unparse(p, 0);
-		p.print("(");
-		if (myExpList != null) {
-			myExpList.unparse(p, 0);
-		}
-		p.print(")");
+        myId.unparse(p, 0);
+        p.print("(");
+        if (myExpList != null) {
+            myExpList.unparse(p, 0);
+        }
+        p.print(")");
     }
 
     // 2 kids
@@ -994,6 +1162,10 @@ abstract class UnaryExpNode extends ExpNode {
         myExp = exp;
     }
 
+    public void analyze(SymTable symtb){
+        myExp.analyze(symtb);
+    }
+
     // one child
     protected ExpNode myExp;
 }
@@ -1002,6 +1174,11 @@ abstract class BinaryExpNode extends ExpNode {
     public BinaryExpNode(ExpNode exp1, ExpNode exp2) {
         myExp1 = exp1;
         myExp2 = exp2;
+    }
+
+    public void analyze(SymTable symtb){
+        myExp1.analyze(symtb);
+        myExp2.analyze(symtb);
     }
 
     // two kids
@@ -1019,9 +1196,9 @@ class UnaryMinusNode extends UnaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(-");
-		myExp.unparse(p, 0);
-		p.print(")");
+        p.print("(-");
+        myExp.unparse(p, 0);
+        p.print(")");
     }
 }
 
@@ -1031,9 +1208,9 @@ class NotNode extends UnaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(!");
-		myExp.unparse(p, 0);
-		p.print(")");
+        p.print("(!");
+        myExp.unparse(p, 0);
+        p.print(")");
     }
 }
 
@@ -1047,11 +1224,11 @@ class PlusNode extends BinaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(");
-		myExp1.unparse(p, 0);
-		p.print(" + ");
-		myExp2.unparse(p, 0);
-		p.print(")");
+        p.print("(");
+        myExp1.unparse(p, 0);
+        p.print(" + ");
+        myExp2.unparse(p, 0);
+        p.print(")");
     }
 }
 
@@ -1061,11 +1238,11 @@ class MinusNode extends BinaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(");
-		myExp1.unparse(p, 0);
-		p.print(" - ");
-		myExp2.unparse(p, 0);
-		p.print(")");
+        p.print("(");
+        myExp1.unparse(p, 0);
+        p.print(" - ");
+        myExp2.unparse(p, 0);
+        p.print(")");
     }
 }
 
@@ -1075,11 +1252,11 @@ class TimesNode extends BinaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(");
-		myExp1.unparse(p, 0);
-		p.print(" * ");
-		myExp2.unparse(p, 0);
-		p.print(")");
+        p.print("(");
+        myExp1.unparse(p, 0);
+        p.print(" * ");
+        myExp2.unparse(p, 0);
+        p.print(")");
     }
 }
 
@@ -1089,11 +1266,11 @@ class DivideNode extends BinaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(");
-		myExp1.unparse(p, 0);
-		p.print(" / ");
-		myExp2.unparse(p, 0);
-		p.print(")");
+        p.print("(");
+        myExp1.unparse(p, 0);
+        p.print(" / ");
+        myExp2.unparse(p, 0);
+        p.print(")");
     }
 }
 
@@ -1103,11 +1280,11 @@ class AndNode extends BinaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(");
-		myExp1.unparse(p, 0);
-		p.print(" && ");
-		myExp2.unparse(p, 0);
-		p.print(")");
+        p.print("(");
+        myExp1.unparse(p, 0);
+        p.print(" && ");
+        myExp2.unparse(p, 0);
+        p.print(")");
     }
 }
 
@@ -1117,11 +1294,11 @@ class OrNode extends BinaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(");
-		myExp1.unparse(p, 0);
-		p.print(" || ");
-		myExp2.unparse(p, 0);
-		p.print(")");
+        p.print("(");
+        myExp1.unparse(p, 0);
+        p.print(" || ");
+        myExp2.unparse(p, 0);
+        p.print(")");
     }
 }
 
@@ -1131,11 +1308,11 @@ class EqualsNode extends BinaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(");
-		myExp1.unparse(p, 0);
-		p.print(" == ");
-		myExp2.unparse(p, 0);
-		p.print(")");
+        p.print("(");
+        myExp1.unparse(p, 0);
+        p.print(" == ");
+        myExp2.unparse(p, 0);
+        p.print(")");
     }
 }
 
@@ -1145,11 +1322,11 @@ class NotEqualsNode extends BinaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(");
-		myExp1.unparse(p, 0);
-		p.print(" != ");
-		myExp2.unparse(p, 0);
-		p.print(")");
+        p.print("(");
+        myExp1.unparse(p, 0);
+        p.print(" != ");
+        myExp2.unparse(p, 0);
+        p.print(")");
     }
 }
 
@@ -1159,11 +1336,11 @@ class LessNode extends BinaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(");
-		myExp1.unparse(p, 0);
-		p.print(" < ");
-		myExp2.unparse(p, 0);
-		p.print(")");
+        p.print("(");
+        myExp1.unparse(p, 0);
+        p.print(" < ");
+        myExp2.unparse(p, 0);
+        p.print(")");
     }
 }
 
@@ -1173,11 +1350,11 @@ class GreaterNode extends BinaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(");
-		myExp1.unparse(p, 0);
-		p.print(" > ");
-		myExp2.unparse(p, 0);
-		p.print(")");
+        p.print("(");
+        myExp1.unparse(p, 0);
+        p.print(" > ");
+        myExp2.unparse(p, 0);
+        p.print(")");
     }
 }
 
@@ -1187,11 +1364,11 @@ class LessEqNode extends BinaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(");
-		myExp1.unparse(p, 0);
-		p.print(" <= ");
-		myExp2.unparse(p, 0);
-		p.print(")");
+        p.print("(");
+        myExp1.unparse(p, 0);
+        p.print(" <= ");
+        myExp2.unparse(p, 0);
+        p.print(")");
     }
 }
 
@@ -1201,10 +1378,10 @@ class GreaterEqNode extends BinaryExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-	    p.print("(");
-		myExp1.unparse(p, 0);
-		p.print(" >= ");
-		myExp2.unparse(p, 0);
-		p.print(")");
+        p.print("(");
+        myExp1.unparse(p, 0);
+        p.print(" >= ");
+        myExp2.unparse(p, 0);
+        p.print(")");
     }
 }
