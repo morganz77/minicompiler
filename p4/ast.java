@@ -312,9 +312,6 @@ class ExpListNode extends ASTnode {
 // **********************************************************************
 
 abstract class DeclNode extends ASTnode {
-    ///TODO abstract
-    //public void analyze(SymTable symtb, String typeStr, SemSym sym ){ // type can be type of variable or return value of function
-    //}
 }
 
 class VarDeclNode extends DeclNode {
@@ -329,7 +326,7 @@ class VarDeclNode extends DeclNode {
         String typeStr = myType.toString();
         if (typeStr.equals("struct")){
             String structName = ((StructNode)myType).getIdName();
-            myId.analyzeVarStructDecl(symtb, structName);
+            myId.analyzeVarStructDecl(symtb, structName, ((StructNode)myType).getId());
         }else {
             myId.analyzeDecl(symtb, typeStr, IdNode.VAR, null );
         }
@@ -507,6 +504,10 @@ class StructNode extends TypeNode {
 
     public String getIdName(){
         return myId.toString();
+    }
+
+    public IdNode getId(){
+        return myId;
     }
 
     public String toString(){
@@ -888,7 +889,6 @@ class IdNode extends ExpNode {
     }
 
     public void analyze(SymTable symtb, int mode){
-        //TODO change mode to something useful
         try{
             if (mode == IdNode.STRUCTVAR){
                 mySym = symtb.lookupGlobal(myStrVal); //link for unparsing
@@ -902,10 +902,12 @@ class IdNode extends ExpNode {
                 mySym = symtb.lookupGlobal(myStrVal); //link for unparsing
                 if ( mySym == null ){
                     ErrMsg.fatal(myLineNum, myCharNum, "Undeclared identifier");
-                } else if (mySym.getKind() != IdNode.FUN){
-                    ErrMsg.fatal(myLineNum, myCharNum,  "Undeclared identifier");//TODO piazza response
-                    mySym = null;
-                }
+                } 
+                //no need to check type
+                //else if (mySym.getKind() != IdNode.FUN){
+                //    ErrMsg.fatal(myLineNum, myCharNum,  "Undeclared identifier");
+                //    mySym = null;
+                //}
 
             }
         }catch(Exception e){
@@ -913,14 +915,14 @@ class IdNode extends ExpNode {
         }
     }
 
-    public void analyzeVarStructDecl(SymTable symtb, String structName){
+    public void analyzeVarStructDecl(SymTable symtb, String structName, IdNode id){
         try{
             //check if structName is in symtb; if it is structDecl
             SemSym sym = symtb.lookupGlobal(structName);
             if (sym==null){sym = ProgramNode.globalStructSym.get(structName);}//for func and var, this is a subset of symtb; for struct, it should work
             //System.out.println(structName);
             if (  sym == null || sym.getKind()!=IdNode.STRUCTDECL){
-                ErrMsg.fatal(myLineNum, myCharNum, "Invalid name of struct type");
+                ErrMsg.fatal(id.myLineNum, id.myCharNum, "Invalid name of struct type");
                 return;
             } 
             if ( symtb.lookupLocal(myStrVal) != null ){
@@ -965,9 +967,7 @@ class IdNode extends ExpNode {
                     symtb.addDecl(myStrVal, new StructDeclSym(symtbs));
                     ProgramNode.globalStructSym.put(myStrVal, new StructDeclSym(symtbs));
                 }
-            } else{ // FUN
-                //TODO
-            }
+            } 
         }catch(Exception e){
             ErrMsg.fatal(myLineNum, myCharNum, "Exception occurs!");
         }
@@ -1039,7 +1039,6 @@ class DotAccessExpNode extends ExpNode {
 
     public void analyze(SymTable symtb){
         try{
-            //System.out.println("here "+myId.toString());
             if (String.valueOf(myLoc.getClass()).equals("class IdNode")){//base case for recursion
                 myLoc.analyze(symtb, IdNode.STRUCTVAR);
                 SemSym sym = myLoc.getSym();
@@ -1068,12 +1067,9 @@ class DotAccessExpNode extends ExpNode {
                     } else {
                         //if id is in, update mySym to the one
                         //else error
-                        //SymTable symtbs = ((StructDeclSym)sym).getSymtb();
-                        //mySym = symtbs.loolup(myId.toString());
                         mySym = ((StructSym)sym).lookup(myId.toString());
                         myId.setSym(mySym);
                         if(mySym==null){
-                            //System.out.println("here");
                             ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), "Invalid struct field name");
                             firstVarDefined = false;
                         }
@@ -1136,8 +1132,6 @@ class CallExpNode extends ExpNode {
     }
 
     public void analyze(SymTable symtb){
-        //TODO: need to check num of params?
-        //wait for piazza
         myId.analyze(symtb, IdNode.FUN);
         myExpList.analyze(symtb);
     }
