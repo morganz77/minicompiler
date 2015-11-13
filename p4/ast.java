@@ -1037,6 +1037,13 @@ class DotAccessExpNode extends ExpNode {
         return firstVarDefined;
     }
 
+    public IdNode getId(){
+        return myId;
+    }
+
+    public int getLineNum(){return ((DotAccessExpNode)myLoc).getId().getLineNum();}
+    public int getCharNum(){return ((DotAccessExpNode)myLoc).getId().getCharNum();}
+
     public void analyze(SymTable symtb){
         try{
             if (String.valueOf(myLoc.getClass()).equals("class IdNode")){//base case for recursion
@@ -1062,7 +1069,7 @@ class DotAccessExpNode extends ExpNode {
                 }else {
                     int symKind = sym.getKind();
                     if (symKind != IdNode.STRUCTVAR){
-                        ErrMsg.fatal(myId.getLineNum(), myId.getCharNum(), "Dot-access of non-struct type");
+                        ErrMsg.fatal(getLineNum(), getCharNum(), "Dot-access of non-struct type");
                         firstVarDefined = false;
                     } else {
                         //if id is in, update mySym to the one
