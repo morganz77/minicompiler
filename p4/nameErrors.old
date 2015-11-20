@@ -7,7 +7,7 @@
 26:7 ***ERROR*** Invalid struct field name
 27:4 ***ERROR*** Invalid struct field name
 28:4 ***ERROR*** Invalid struct field name
-29:4 ***ERROR*** Dot-access of non-struct type
+29:6 ***ERROR*** Dot-access of non-struct type
 30:4 ***ERROR*** Invalid struct field name
 31:13 ***ERROR*** Invalid struct field name
 32:13 ***ERROR*** Invalid struct field name

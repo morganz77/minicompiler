@@ -1,0 +1,46 @@
+
+struct S{
+    int a;
+    int b;
+};
+
+struct P{
+    int a;
+    int b;
+    struct S s;
+};
+
+void foo(){
+    return 1;
+}
+
+int foo2(int a, bool b){
+    return 1;
+}
+
+int foo3(int a, bool b){
+    return false;
+}
+
+int main(){
+    struct P p;
+    cout<<foo;
+    cout<<P;
+    cout<<p;
+    cout<<foo();
+
+    cin>>foo;
+    cin>>P;
+    cin>>p;
+
+    p();
+    foo(1);
+    foo2(1,1);
+    cout<<foo(1);
+    cout<<foo2(foo2(foo(),1),1);
+    cout<<foo2(foo(foo(),1),1);//consider return type of foo()??
+
+    return;
+}
+
+
