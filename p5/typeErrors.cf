@@ -10,6 +10,16 @@ struct P{
     struct S s;
 };
 
+void fv(){
+
+}
+
+//example
+bool f(int a){
+    return true;
+}
+void x(){}
+
 void foo(){
     return 1;
 }
@@ -22,10 +32,11 @@ int foo3(int a, bool b){
     return false;
 }
 
-int main(){
+void main(){
     int v;
     bool b;
     struct P p;
+    struct S s;
     cout<<foo;
     cout<<P;
     cout<<p;
@@ -58,6 +69,45 @@ int main(){
     b = !(v+true+false);
     b = v<=1;
 
+    if (v+1){
+        int v2;
+        v = 1+true;
+    }
+    if (true+false){}
+    if (true+false){}else{v=1&&3||false||3;}
+    while (true+false){}
+    while (1+v){}
+    while (v==true){}
+    while (v=true){}
+    while (v=1){}
+
+    b = fv()==fv();
+    b = fv()!=fv()&&true;
+    b = fv==fv;
+    b = 1||fv!=fv&&1;
+    b = main==fv;
+    b = main==8;
+    b = P == S;
+    b = P != S;
+    b = p == s;
+    b = p != s;
+    fv = main;
+    P=S;
+    p=s;
+
+    //exampe from webpage
+cout << P + 1;          // P + 1 is an error; the write is OK
+b=(true + 3) * 4;         // true + 3 is an error; the * is OK
+b=true && (false || 3);   // false || 3 is an error; the && is OK
+b=f("a" * 4);            // "a" * 4 is an error; the call is OK
+b=1 + p();               // p() is an error; the + is OK
+b=(true + 3) == x;        // true + 3 is an error; the == is OK
+                       // regardless of the type of x
+b=true + "hello";    // one error for each of the non-int operands of the +
+b=1 + f(true);       // one for the bad arg type and one for the 2nd operand of the +
+b=1 + f(1, 2);       // one for the wrong number of args and one for the 2nd operand of the +
+return 3+true;    // in a void function: one error for the 2nd operand to +
+                  // and one for returning a value
 
     return;
 }
