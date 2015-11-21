@@ -23,6 +23,8 @@ int foo3(int a, bool b){
 }
 
 int main(){
+    int v;
+    bool b;
     struct P p;
     cout<<foo;
     cout<<P;
@@ -39,6 +41,23 @@ int main(){
     cout<<foo(1);
     cout<<foo2(foo2(foo(),1),1);
     cout<<foo2(foo(foo(),1),1);//consider return type of foo()??
+    cout << P + 1;
+
+    v = 1+true;
+    b = 1+2;
+    b++;
+    p.s++;
+    //p.s.a++;
+    b = v>false;
+    b = true<=false;
+    b = (1+2)<=v+true;
+    b = v && true;
+    b = v || true;
+    b = v && 1;
+    b = !v;
+    b = !(v+true+false);
+    b = v<=1;
+
 
     return;
 }
