@@ -1877,6 +1877,25 @@ class UnaryMinusNode extends UnaryExpNode {
         super(exp);
     }
 
+    public Type typeCheck(IdNode id){
+        Type ret = new IntType();
+        Type t = myExp.typeCheck(id);
+
+        //if isErrorType(), then ignore
+        if (t.isErrorType()){//stop the cascading
+            return new ErrorType();
+        }
+
+        if (!t.isIntType()){
+            ret = new ErrorType();
+        }
+
+        if (!t.isIntType() && !t.isErrorType()){
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Arithmetic operator applied to non-numeric operand");
+        }
+        return ret;
+    }
+
     public void unparse(PrintWriter p, int indent) {
         p.print("(-");
         myExp.unparse(p, 0);
@@ -1931,7 +1950,8 @@ class PlusNode extends BinaryExpNode {
 
         //if isErrorType(), then ignore
         if (t1.isErrorType() || t2.isErrorType()){//stop the cascading
-            return new ErrorType();
+            //return new ErrorType();
+            ret = new ErrorType();
         }
 
         if (!t1.isIntType() || !t2.isIntType()){
@@ -1968,7 +1988,8 @@ class MinusNode extends BinaryExpNode {
 
         //if isErrorType(), then ignore
         if (t1.isErrorType() || t2.isErrorType()){//stop the cascading
-            return new ErrorType();
+            //return new ErrorType();
+            ret = new ErrorType();
         }
 
         if (!t1.isIntType() || !t2.isIntType()){
@@ -2005,7 +2026,8 @@ class TimesNode extends BinaryExpNode {
 
         //if isErrorType(), then ignore
         if (t1.isErrorType() || t2.isErrorType()){//stop the cascading
-            return new ErrorType();
+            //return new ErrorType();
+            ret = new ErrorType();
         }
 
         if (!t1.isIntType() || !t2.isIntType()){
@@ -2042,7 +2064,8 @@ class DivideNode extends BinaryExpNode {
 
         //if isErrorType(), then ignore
         if (t1.isErrorType() || t2.isErrorType()){//stop the cascading
-            return new ErrorType();
+            //return new ErrorType();
+            ret = new ErrorType();
         }
 
         if (!t1.isIntType() || !t2.isIntType()){
@@ -2079,7 +2102,8 @@ class AndNode extends BinaryExpNode {
 
         //if isErrorType(), then ignore
         if (t1.isErrorType() || t2.isErrorType()){//stop the cascading
-            return new ErrorType();
+            //return new ErrorType();
+            ret = new ErrorType();
         }
 
         if (!t1.isBoolType() || !t2.isBoolType()){
@@ -2116,7 +2140,8 @@ class OrNode extends BinaryExpNode {
 
         //if isErrorType(), then ignore
         if (t1.isErrorType() || t2.isErrorType()){//stop the cascading
-            return new ErrorType();
+            //return new ErrorType();
+            ret = new ErrorType();
         }
 
         if (!t1.isBoolType() || !t2.isBoolType()){
@@ -2249,7 +2274,8 @@ class LessNode extends BinaryExpNode {
 
         //if isErrorType(), then ignore
         if (t1.isErrorType() || t2.isErrorType()){//stop the cascading
-            return new ErrorType();
+            //return new ErrorType();
+            ret = new ErrorType();
         }
 
         if (!t1.isIntType() || !t2.isIntType()){
@@ -2286,7 +2312,8 @@ class GreaterNode extends BinaryExpNode {
 
         //if isErrorType(), then ignore
         if (t1.isErrorType() || t2.isErrorType()){//stop the cascading
-            return new ErrorType();
+            //return new ErrorType();
+            ret = new ErrorType();
         }
 
         if (!t1.isIntType() || !t2.isIntType()){
@@ -2322,7 +2349,8 @@ class LessEqNode extends BinaryExpNode {
 
         //if isErrorType(), then ignore
         if (t1.isErrorType() || t2.isErrorType()){//stop the cascading
-            return new ErrorType();
+            //return new ErrorType();
+            ret = new ErrorType();
         }
 
         if (!t1.isIntType() || !t2.isIntType()){
@@ -2358,7 +2386,8 @@ class GreaterEqNode extends BinaryExpNode {
 
         //if isErrorType(), then ignore
         if (t1.isErrorType() || t2.isErrorType()){//stop the cascading
-            return new ErrorType();
+            //return new ErrorType();
+            ret = new ErrorType();
         }
 
         if (!t1.isIntType() || !t2.isIntType()){

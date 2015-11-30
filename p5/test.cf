@@ -32,23 +32,25 @@ struct S3{
 int foo(int a, int b){
     struct S3 s3;
     s3.a = 1;
-    s3.c = 1;
+    //s3.c = 1;
     s3.s2.s1.a = 0;
     s3.s2.s1.a ++;
     s3.s2.s1.a ++;
     cout << s3.s2.s1.a ;
     cin >> s3.s2.s1.a ;
-    if (z>1) {
+    //if (z>1) {
+    if (s3.a>1) {
         int z;
         int s3;
     }
-    if (z>1) {
+    //if (z>1) {
+    if (s3.a>1) {
         int z;
         int s3;
     } else {
         int z;
     }
-    while (z<z){
+    while (s3.a<s3.s2.s1.a){
         int z;
         int s3;
         s3++;
@@ -56,7 +58,7 @@ int foo(int a, int b){
     }
 }
 int a;
-int bar(bool z, int k, int a) {bool c; int ccc; c=true; ccc=1;c=2; cout<<ccc;cin>>a; }
+int bar(bool z, int k, int a) {bool c; int ccc; c=true; ccc=1;c=true; cout<<ccc;cin>>a; }
 int bar2(bool z) {
     int a;
     struct S1 b;
@@ -64,7 +66,7 @@ int bar2(bool z) {
         struct S1 b;
         cout<<a;
     }else{
-        cout<<b;
+        cout<<a;
     }
     if (false){
         cout<<a;
@@ -72,7 +74,7 @@ int bar2(bool z) {
     while (a<0){
         while(a>-4){
             if(a==-2){
-                cout<<b;
+                cout<<a;
             }
         }
     }
@@ -82,7 +84,10 @@ int bar2(bool z) {
 
 //statement
 //a.assignExp
-int main(int a, bool b, int c){
+int main(int a, int b, int c){
+    bool bb;
+    bool aa;
+    bool cc;
     struct S3 s;
     a = 10; b = 5;
     a = b + a;
@@ -90,8 +95,8 @@ int main(int a, bool b, int c){
     a = b + b / a;
     a = b - a + a;
     a = b*a/b;
-    a = !b && a || b;
-    a = a!=b && a<b || a<=b || a>b && a>=b || a==b;
+    cc = !bb && bb || bb;
+    cc = aa!=bb && a<b || a<=b || a>b && a>=b || a==b;
     a = -a;
     a = -5;
     a = (a+b)*c;
@@ -111,10 +116,10 @@ void main2(){
 }
 //c.function call
 int main3(){
-    if(1){
-        foo(true, a, 1, false);
+    if(true){
+        foo(a, 1);
     } else {
-        foo();
+        foo(a,a+a);
     }
 }
 
@@ -122,5 +127,5 @@ int main3(){
 int c;
 int main4(){
     int b;
-    if (b == -1) { x = 4+3*5-y; while (c) { y = y*2+x; } } else { x = 0; }
+    if (b == -1) { x = 4+3*5-y; while (c<b) { y = y*2+x; } } else { x = 0; }
 }

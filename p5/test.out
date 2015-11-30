@@ -1,0 +1,154 @@
+struct Point{
+    int x;
+    int y;
+};
+
+int f(int x, bool b) {
+}
+
+void g() {
+    int a;
+    bool b;
+    struct Point p;
+    p(Point).x(int) = a(int);
+    b(bool) = (a(int) == 3);
+    f(int,bool->int)((a(int) + (p(Point).y(int) * 2)), b(bool));
+    g(->void)();
+}
+
+int x;
+int y;
+bool z;
+struct S1{
+    int a;
+    int b;
+    bool c;
+};
+
+struct S2{
+    struct S1 s1;
+};
+
+struct S3{
+    int a;
+    int b;
+    bool c;
+    struct S2 s2;
+};
+
+int foo(int a, int b) {
+    struct S3 s3;
+    s3(S3).a(int) = 1;
+    s3(S3).s2(S2).s1(S1).a(int) = 0;
+    s3(S3).s2(S2).s1(S1).a(int)++;
+    s3(S3).s2(S2).s1(S1).a(int)++;
+    cout << s3(S3).s2(S2).s1(S1).a(int);
+    cin >> s3(S3).s2(S2).s1(S1).a(int);
+    if ((s3(S3).a(int) > 1)) {
+        int z;
+        int s3;
+    }
+    if ((s3(S3).a(int) > 1)) {
+        int z;
+        int s3;
+    }
+    else {
+        int z;
+    }
+    while ((s3(S3).a(int) < s3(S3).s2(S2).s1(S1).a(int))) {
+        int z;
+        int s3;
+        s3(int)++;
+        z(int)++;
+    }
+}
+
+int a;
+int bar(bool z, int k, int a) {
+    bool c;
+    int ccc;
+    c(bool) = true;
+    ccc(int) = 1;
+    c(bool) = true;
+    cout << ccc(int);
+    cin >> a(int);
+}
+
+int bar2(bool z) {
+    int a;
+    struct S1 b;
+    if (true) {
+        struct S1 b;
+        cout << a(int);
+    }
+    else {
+        cout << a(int);
+    }
+    if (false) {
+        cout << a(int);
+    }
+    while ((a(int) < 0)) {
+        while ((a(int) > (-4))) {
+            if ((a(int) == (-2))) {
+                cout << a(int);
+            }
+        }
+    }
+    a(int)++;
+    a(int)--;
+}
+
+int main(int a, int b, int c) {
+    bool bb;
+    bool aa;
+    bool cc;
+    struct S3 s;
+    a(int) = 10;
+    b(int) = 5;
+    a(int) = (b(int) + a(int));
+    a(int) = ((b(int) + b(int)) + a(int));
+    a(int) = (b(int) + (b(int) / a(int)));
+    a(int) = ((b(int) - a(int)) + a(int));
+    a(int) = ((b(int) * a(int)) / b(int));
+    cc(bool) = (((!bb(bool)) && bb(bool)) || bb(bool));
+    cc(bool) = (((((aa(bool) != bb(bool)) && (a(int) < b(int))) || (a(int) <= b(int))) || ((a(int) > b(int)) && (a(int) >= b(int)))) || (a(int) == b(int)));
+    a(int) = (-a(int));
+    a(int) = (-5);
+    a(int) = ((a(int) + b(int)) * c(int));
+    s(S3).a(int) = a(int);
+    a(int) = ((-(9 * s(S3).a(int))) + (9 * 10));
+    a(int) = ((1 - (9 * s(S3).a(int))) + (9 * 10));
+    a(int) = (a(int) + (b(int) * c(int)));
+}
+
+int main1(int a, int b, int c) {
+    return 1;
+}
+
+void main2() {
+    return;
+}
+
+int main3() {
+    if (true) {
+        foo(int,int->int)(a(int), 1);
+    }
+    else {
+        foo(int,int->int)(a(int), (a(int) + a(int)));
+    }
+}
+
+int c;
+int main4() {
+    int b;
+    if ((b(int) == (-1))) {
+        x(int) = ((4 + (3 * 5)) - y(int));
+        while ((c(int) < b(int))) {
+            y(int) = ((y(int) * 2) + x(int));
+        }
+    }
+    else {
+        x(int) = 0;
+    }
+}
+

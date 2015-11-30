@@ -18,7 +18,7 @@ void fv(){
 bool f(int a){
     return true;
 }
-void x(){}
+void x(){return 3+true;}
 
 void foo(){
     return 1;
@@ -80,6 +80,7 @@ void main(){
     while (v==true){}
     while (v=true){}
     while (v=1){}
+    while (v>-(b+v)){}
 
     b = fv()==fv();
     b = fv()!=fv()&&true;
@@ -94,6 +95,7 @@ void main(){
     fv = main;
     P=S;
     p=s;
+    b = (1 + true) && 42;
 
     //exampe from webpage
 cout << P + 1;          // P + 1 is an error; the write is OK
@@ -111,5 +113,3 @@ return 3+true;    // in a void function: one error for the 2nd operand to +
 
     return;
 }
-
-

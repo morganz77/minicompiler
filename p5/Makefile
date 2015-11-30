@@ -53,8 +53,8 @@ EmptySymTableException.class: EmptySymTableException.java
 
 test:
 	#java   P5 typeErrors.cf typeErrors.out
-	java   P5 example.cf example.out
-	#java   P5 test.cf test.out
+	java   P5 test.cf test.out
+	#java   P5 example.cf example.out
 ###
 # clean
 ###
