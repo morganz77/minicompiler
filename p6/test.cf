@@ -1,0 +1,10 @@
+void main() {
+    if ( 2 == 2){
+        cout << "Hello world!";
+        cout << "\n";
+        return;
+    }
+        cout << "Hello world2!\n";
+}
+
+//void foo(){}
