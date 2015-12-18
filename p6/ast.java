@@ -110,7 +110,7 @@ abstract class ASTnode {
     abstract public void unparse(PrintWriter p, int indent);
 
     public void codeGen(PrintWriter p){}
-    public void codeGen(){System.out.println(this.getClass().getName()+" codeGen() not implemented");}
+    public void codeGen(){}
 
     // this method can be used by the unparse methods to do indenting
     protected void doIndent(PrintWriter p, int indent) {
@@ -920,7 +920,7 @@ class StructNode extends TypeNode {
 abstract class StmtNode extends ASTnode {
     abstract public void nameAnalysis(SymTable symTab);
     abstract public void typeCheck(Type retType);
-    public void codeGen(String retLabel){System.out.println( this.getClass().getName() + " not implemented yet!");}
+    public void codeGen(String retLabel){}
 }
 
 class AssignStmtNode extends StmtNode {
@@ -1107,14 +1107,13 @@ class WriteStmtNode extends StmtNode {
 
     public void codeGen(String retLabel){
         myExp.codeGen();
-//System.out.println(myExp.getClass().getName());
         Codegen.genPop(Codegen.A0);
 
         if (expType.isStringType()){
             Codegen.generate("li", Codegen.V0, "4");//string
         }else if(expType.isIntType() || expType.isBoolType()){
             Codegen.generate("li", Codegen.V0, "1");//int, and bool
-        }//TODO any other types? or is it the same as above?
+        }
 
         Codegen.generate("syscall");
     }
@@ -1517,7 +1516,7 @@ abstract class ExpNode extends ASTnode {
      */
     public void nameAnalysis(SymTable symTab) { }
 
-    public void genJumpCode(String trueLab, String falseLab) {System.out.println(this.getClass().getName()+" genjumpcode not implemented yet"); }
+    public void genJumpCode(String trueLab, String falseLab) {}
     
     abstract public Type typeCheck();
     abstract public int lineNum();

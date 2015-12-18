@@ -52,9 +52,7 @@ EmptySymTableException.class: EmptySymTableException.java
 	$(JC) -g EmptySymTableException.java
 
 test:
-	#java   P6 typeErrors.cf typeErrors.out
 	java   P6 test.cf test.s
-	#java   P6 example.cf example.out
 ###
 # clean
 ###
