@@ -6,9 +6,24 @@ import java.util.*;
  */
 public class SemSym {
     private Type type;
+    protected int offset;
     
     public SemSym(Type type) {
         this.type = type;
+        offset = 0;
+    }
+
+    public SemSym(Type type, int offset) {
+        this.type = type;
+        this.offset = offset;
+    }
+
+    public void setOffset(int offset){
+        this.offset = offset;
+    }
+
+    public int getOffset(){
+        return offset * 4;
     }
     
     public Type getType() {
@@ -54,14 +69,14 @@ class FnSym extends SemSym {
     }
 
     /**/
-    public int getParamsOffset() {
+    public int getParamsSize() {
         return numParams * 4;
     }
 
     public void setNumLocals(int num){
         numLocals = num;
     }
-    public int getLocalsOffset() {
+    public int getLocalsSize() {
         return numLocals * 4;
     }
     /**/

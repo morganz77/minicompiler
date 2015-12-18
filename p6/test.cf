@@ -1,10 +1,75 @@
-void main() {
-    if ( 2 == 2){
-        cout << "Hello world!";
-        cout << "\n";
-        return;
-    }
-        cout << "Hello world2!\n";
+int c;
+int d;
+
+int foo(int a, int b){
+    return a*b;
 }
 
-//void foo(){}
+int e;
+
+
+bool ftrue(){
+    return true;
+}
+
+int fib(int n){
+    if (n==1 || n==2){
+        return 1;
+    }else{
+        return fib(n-1)+fib(n-2);
+    }
+}
+
+int callfib(int a, int b){
+    return fib(a) * b;
+}
+
+void main() {
+    int a;
+    bool b;
+    bool b2;
+    b = false;
+    a = foo(10,22); cout<<-a; cout << "\n";
+    c = foo(30,4); cout<<c; cout << "\n";
+    b2 = !b;if(b2){cout<<"test_!bool\n";}
+    b = !b && !b; if(b){cout<<"test andnode codegen\n";}
+    if(b=b || c>c){cout<<"test\n";}
+    if(!ftrue() || true){cout<<"test_ftrue\n";}
+    //b = "a" == "a";
+    //b2 = "aa" == "aA";
+    b = 1==1;
+    b2 = 2==3;
+    if(b2 && b){cout<<"test_equals\n";}
+    b = "a" == "a";
+    b2 = "aa" == "aa";
+    if(b2 && b){cout<<"test_str_equals\n";}
+    b = "a" != "a";
+    b2 = "aa" == "aa";
+    if(b2 && !b){cout<<"test_str_!equals\n";}
+    cout<<a;cout<<" ";a++;cout<<a;cout<<"\n";
+    cout<<a;cout<<" ";a--;cout<<a;cout<<"\n";
+
+    if(!b2){
+        cout<<a;cout<<" ";a++;cout<<a;cout<<"\n";
+    }else{
+        cout<<a;cout<<" ";a--;cout<<a;cout<<"\n";
+    }
+
+    while(a<200){
+        int d;
+        a++;
+        d = a;
+    }
+    cout<<a;cout<<" ";a--;cout<<a;cout<<"\n";
+
+    a = 1;
+    while (a<20){
+    cout<<fib(a);cout<<"\n";
+    a++;
+    }
+
+    cout<<callfib(10,1000);cout<<"\n";
+
+
+}
+
